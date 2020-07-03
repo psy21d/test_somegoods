@@ -4,9 +4,8 @@
     <v-app id ="table-app">
       <v-data-table
         :headers="tableheaders"
-        :items="goods"
+        :items="tablegoods"
         :items-per-page="10"
-        :sort-by="headers"
         :sort-desc="[false, true]"
         multi-sort
         class="datatable"
@@ -62,7 +61,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" text @click="dialogClose">Отмена</v-btn>
+            <v-btn color="blue darken-1" text @click="dialogClose">Закрыть</v-btn>
             <v-btn color="blue darken-1" text @click="confirmEditItem">Сохранить</v-btn>
           </v-card-actions>
         </v-card>
@@ -94,8 +93,12 @@ export default class Table extends Vue {
   formTitle=""
   dialogShow=false
 
+  isNewItem=true
+
   //activate this.headers access
   headers = headers
+
+  tablegoods = goods
   
   // TODO сделать запрос полей с сервера или на основе возвращаемых данных
   tableheaders: Array<any> = []
@@ -132,6 +135,7 @@ export default class Table extends Vue {
   }
 
   fillNewItem() {
+    this.editedItem = {...this.editedItem}
     this.headers.forEach(header => {
       this.editedItem[header] = ""
     })
@@ -139,19 +143,22 @@ export default class Table extends Vue {
   }
 
   fillEditedItem(item: any) {
-    Object.keys(item).forEach(key => {
-      this.editedItem[key] = item[key]
-    })
+    this.editedItem = item
+    //Object.keys(item).forEach(key => {
+    //  this.editedItem[key] = item[key]
+    //})
   }
 
   createItem() {
     this.formTitle="Новый товар"
+    this.isNewItem=true
     this.dialogShow=true
     this.fillNewItem()    
   }
 
   editItem(item: any) {
     this.formTitle="Редактировать товар"
+    this.isNewItem=false
     this.dialogShow=true
     this.fillEditedItem(item)
   }
@@ -162,6 +169,10 @@ export default class Table extends Vue {
 
   confirmEditItem() {
     this.dialogShow=false
+    if (this.isNewItem) {
+      this.tablegoods.push({...this.editedItem})
+    }
+    // TODO upload to server (call update request)
   }
 
   dialogClose() {
