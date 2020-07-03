@@ -2,16 +2,7 @@
   <div class="container">
     <!-- v-app important -->
     <v-app id ="table-app">
-      <v-data-table
-        :headers="tableheaders"
-        :items="tablegoods"
-        :items-per-page="10"
-        :sort-desc="[false, true]"
-        multi-sort
-        class="datatable"
-      >
-      <template
-        v-slot:top
+      <div
         class="table__top"
       >
         <v-btn
@@ -22,7 +13,15 @@
         >
         + Создать новый товар
         </v-btn> 
-      </template>
+      </div>
+      <v-data-table
+        :headers="tableheaders"
+        :items="tablegoods"
+        :items-per-page="10"
+        :sort-desc="[false, true]"
+        multi-sort
+        class="datatable"
+      >
       <template v-slot:item.edit_fields="{ item }">
         <td class="nowrap">
           <v-icon
