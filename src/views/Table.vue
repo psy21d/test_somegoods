@@ -97,8 +97,6 @@ export default class Table extends Vue {
 
   //activate this.headers access
   headers = headers
-
-  tablegoods = goods
   
   // TODO сделать запрос полей с сервера или на основе возвращаемых данных
   tableheaders: Array<any> = []
@@ -108,7 +106,7 @@ export default class Table extends Vue {
   
   //TODO временное решение для mock
   //Создать id товара для редактирования
-  goods = goods.map(item => {
+  tablegoods = goods.map(item => {
     return {
       id: uuidv4(),
       ...item
@@ -164,7 +162,10 @@ export default class Table extends Vue {
   }
 
   deleteItem(item: any) {
-    /* empty */
+    const id = item.id
+    this.tablegoods = this.tablegoods.filter(item => {
+      return (item.id !== id)
+    })
   }
 
   confirmEditItem() {
